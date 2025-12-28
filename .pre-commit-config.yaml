@@ -1,68 +1,39 @@
+ci:
+  autofix_prs: false
+
 repos:
-  # Основные проверки
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: tests/repositories/fixtures/pypi.org/metadata/.*\.metadata
       - id: end-of-file-fixer
+        exclude: ^.*\.egg-info/|tests/repositories/fixtures/pypi.org/metadata/.*\.metadata
+      - id: check-merge-conflict
+        exclude: tests/repositories/fixtures/installed/vendor/py3.7/attrs-19.3.0.dist-info/METADATA
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-toml
+        exclude: tests/fixtures/invalid_lock/poetry\.lock
       - id: check-yaml
+      - id: pretty-format-json
+        args: [--autofix, --no-ensure-ascii, --no-sort-keys]
+      - id: check-ast
       - id: debug-statements
-      - id: double-quote-string-fixer
-#      - id: name-tests-test
-      - id: requirements-txt-fixer
+      - id: check-docstring-first
 
-  # Форматирование импортов
-  - repo: https://github.com/asottile/reorder-python-imports
-    rev: v3.16.0
+  - repo: https://github.com/pre-commit/pre-commit
+    rev: v4.5.0
     hooks:
-      - id: reorder-python-imports
-#        args: [--add-import, 'from __future__ import annotations']
+      - id: validate_manifest
 
-  # Добавление запятых в коллекции
-  - repo: https://github.com/asottile/add-trailing-comma
-    rev: v4.0.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.6
     hooks:
-      - id: add-trailing-comma
+      - id: ruff-check
+      - id: ruff-format
 
-  # Обновление синтаксиса Python
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+  - repo: https://github.com/woodruffw/zizmor-pre-commit
+    rev: v1.16.3
     hooks:
-      - id: pyupgrade
-        args: [--py310-plus]
-
-  # Форматирование кода — вместо autopep8 лучше black
-  - repo: https://github.com/psf/black
-    rev: 25.12.0
-    hooks:
-      - id: black
-
-  # Линтинг
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
-    hooks:
-      - id: flake8
-
-  # Проверка типов
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.0
-    hooks:
-      - id: mypy
-        additional_dependencies: [types-requests, types-urllib3]  # по необходимости
-
-  # Форматирование setup.cfg
-  - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v3.1.0
-    hooks:
-      - id: setup-cfg-fmt
-#  # Запуск тестов
-#  # Для pytest используйте хук через скрипт, а не как репозиторий
-#  - repo: local
-#    hooks:
-#      - id: pytest
-#        name: pytest
-#        entry: pytest
-#        language: system
-#        types: [python]
-#        args: [--cov=src, --cov-report=html]
-#        pass_failures: true
+      - id: zizmor
